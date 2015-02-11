@@ -22,7 +22,15 @@ let passengers : Passenger[] =
 // 1. Discover statistics - simple features
 
 let female (passenger:Passenger) = (passenger.Sex = "female")
+let male (passenger:Passenger) = (passenger.Sex = "male")
+
 let survived (passenger:Passenger) = (passenger.Survived = 1)
+let died (passenger:Passenger) = (passenger.Survived = 0)
+
+let underTen (passenger:Passenger) = (passenger.Age < 10.0)
+let overFifty (passenger:Passenger) = (passenger.Age > 50.0)
+
+let upperClass (passenger:Passenger) = (passenger.Pclass = 1)
 
 // Female passengers
 
@@ -30,15 +38,47 @@ let females = passengers |> where female
 let femaleSurvivors = females |> tally survived
 let femaleSurvivorsPc = females |> percentage survived
 
+// Male passengers
+let males = passengers |> where male
+let maleSurvivors = males |> tally survived
+let maleSurvivorsPC = males |> percentage survived
+
 // a) Children under 10
-// Your code here <----
+let childrenUnderTen = passengers |> where underTen
+let childUnderTenSurvivedPC = childrenUnderTen |> percentage survived
+
+let boysUnderTen = childrenUnderTen |> where male
+let boysUnderTenSurvivedPC = boysUnderTen |> percentage survived
+
+let boysUnderTenWhoSurvived = boysUnderTen |> where survived
+
+let girlsUnderTen = childrenUnderTen |> where female
+let girlsUnderTenSurvivedPC = girlsUnderTen |> percentage survived
+let girldUnderTenWhoSurvived = girlsUnderTen |> where survived
 
 // b) Passesngers over 50
-// Your code hre <--
+let passengersOverFifty = passengers |> where overFifty
+let passengersOverFiftySurvivedPC = passengersOverFifty |> percentage survived
+
+let malePassengersOverFifty = passengersOverFifty |> where male
+let malePassengersOverFiftySurvivedPC = malePassengersOverFifty |> percentage survived
+let malePassengersOverFiftyWhoSurvived = malePassengersOverFifty |> where survived
+
+let femalePassengersOverFifty = passengersOverFifty |> where female
+let femalePassengersOverFiftySurvivedPC = femalePassengersOverFifty |> percentage survived
+let femalePassengersOverFiftyWhoSurvived = femalePassengersOverFifty |> where survived
 
 // c) Upper class passengers
-// Your code here <---
+let upperClassPassengers = passengers |> where upperClass
+let upperClassPassengersSurvivedPC = upperClassPassengers |> percentage survived
 
+let maleUpperClassPassengers = upperClassPassengers |> where male
+let maleUpperClassPassengersSurvivedPC = maleUpperClassPassengers |> percentage survived
+let maleUpperClassPassengersWhoSurvived = maleUpperClassPassengers |> where survived
+
+let femaleUpperClassPassengers = upperClassPassengers |> where female
+let femaleUpperClassPassengersSurvivedPC = femaleUpperClassPassengers |> percentage survived
+let femaleUpperClassPassengersWhoSurvived = femaleUpperClassPassengers |> where survived
 
 // 2. Discover statistics - groups  
 

@@ -31,9 +31,13 @@ let underTen (passenger:Passenger) = (passenger.Age < 10.0)
 let overFifty (passenger:Passenger) = (passenger.Age > 50.0)
 
 let upperClass (passenger:Passenger) = (passenger.Pclass = 1)
+let middleClass (passenger:Passenger) = (passenger.Pclass = 2)
+
+let fromSoton (passenger:Passenger) = (passenger.Embarked = "S")
 
 // Female passengers
 
+let passengersSurvived = passengers |> tally survived
 let females = passengers |> where female
 let femaleSurvivors = females |> tally survived
 let femaleSurvivorsPc = females |> percentage survived
@@ -45,40 +49,54 @@ let maleSurvivorsPC = males |> percentage survived
 
 // a) Children under 10
 let childrenUnderTen = passengers |> where underTen
+let childrenUnderTenCount = childrenUnderTen |> tally survived
 let childUnderTenSurvivedPC = childrenUnderTen |> percentage survived
 
 let boysUnderTen = childrenUnderTen |> where male
+let boysUnderTenCount = boysUnderTen |> tally survived
 let boysUnderTenSurvivedPC = boysUnderTen |> percentage survived
-
 let boysUnderTenWhoSurvived = boysUnderTen |> where survived
 
 let girlsUnderTen = childrenUnderTen |> where female
+let girlsUnderTenCount = girlsUnderTen |> tally survived
 let girlsUnderTenSurvivedPC = girlsUnderTen |> percentage survived
 let girldUnderTenWhoSurvived = girlsUnderTen |> where survived
 
 // b) Passesngers over 50
 let passengersOverFifty = passengers |> where overFifty
+let passengersOverFiftyCount = passengersOverFifty |> tally survived
 let passengersOverFiftySurvivedPC = passengersOverFifty |> percentage survived
 
 let malePassengersOverFifty = passengersOverFifty |> where male
+let malePassengersOverFiftyCount = malePassengersOverFifty |> tally survived
 let malePassengersOverFiftySurvivedPC = malePassengersOverFifty |> percentage survived
 let malePassengersOverFiftyWhoSurvived = malePassengersOverFifty |> where survived
 
 let femalePassengersOverFifty = passengersOverFifty |> where female
+let femalePassengersOverFiftyCount = malePassengersOverFifty |> tally survived
 let femalePassengersOverFiftySurvivedPC = femalePassengersOverFifty |> percentage survived
 let femalePassengersOverFiftyWhoSurvived = femalePassengersOverFifty |> where survived
 
 // c) Upper class passengers
 let upperClassPassengers = passengers |> where upperClass
+let upperClassPassengersCount = upperClassPassengers |> tally survived
 let upperClassPassengersSurvivedPC = upperClassPassengers |> percentage survived
 
+let upperClassChildrenUnderTen = upperClassPassengers |> where underTen
+let upperClassChildrenUnderTenCount = upperClassChildrenUnderTen |> tally survived
+let upperClassChildrenUnderTenSurvivedPC = upperClassChildrenUnderTen |> percentage survived
+
 let maleUpperClassPassengers = upperClassPassengers |> where male
+let maleUpperClassPassengersCount = maleUpperClassPassengers |> tally survived
 let maleUpperClassPassengersSurvivedPC = maleUpperClassPassengers |> percentage survived
 let maleUpperClassPassengersWhoSurvived = maleUpperClassPassengers |> where survived
 
 let femaleUpperClassPassengers = upperClassPassengers |> where female
+let femaleUpperClassPassengersCount = femaleUpperClassPassengers |> tally survived
 let femaleUpperClassPassengersSurvivedPC = femaleUpperClassPassengers |> percentage survived
 let femaleUpperClassPassengersWhoSurvived = femaleUpperClassPassengers |> where survived
+
+// By Origin
 
 // 2. Discover statistics - groups  
 
@@ -92,11 +110,10 @@ let survivalRate criteria =
 let embarked = survivalRate (fun p -> p.Embarked)
 
 // a) By passenger class
-// Your code here <---
+let classes = survivalRate (fun p -> p.Pclass)
 
 // b) By age group (under 10, adult, over 50)
-// Your code here <---
-
+let ageGroup = survivalRate (fun p -> (if underTen p then "child" elif overFifty p then "senior" else "adult"))
 
 // 3. Scoring
 
@@ -110,12 +127,13 @@ let notSurvived (p:Passenger) = false
 
 let notSurvivedRate = score notSurvived
 
-// a) Score by embarked point
-// Your code here <---
+let femaleRate = score female
+
+let womenAndKids = score (fun p -> ((female p) || (underTen p)))
 
 // b) Construct function to score over 80%
-// Your code here <---
-
+// Score of 80.75601375
+let upperClassWomenAndKids = score (fun p -> (((upperClass p) && (female p)) || ((middleClass p) && (female p)) || underTen p || ((overFifty p) && (female p))))
 
 // 4. Decision trees
 

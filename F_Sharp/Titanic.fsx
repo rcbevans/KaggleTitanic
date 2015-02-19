@@ -138,10 +138,10 @@ let upperClassWomenAndKids = score (fun p -> (((upperClass p) && (female p)) || 
 // 4. Decision trees
 
 let labels = 
-    [|"sex"; "age";|]
+    [|"sex"; "class"|]
 
 let features (p:Passenger) : obj[] = 
-    [|p.Sex; p.Age;|]
+    [|p.Sex; p.Pclass|]
 
 let dataSet : obj[][] =
     [|for p in passengers ->

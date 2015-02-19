@@ -33,7 +33,7 @@ module internal Array =
 
 open System.IO
 
-let lines = File.ReadAllLines(@"C:\titanic\train.csv").[1..]
+let lines = File.ReadAllLines(__SOURCE_DIRECTORY__ + "/train.csv").[1..]
 
 type Name = string
 type Sex = Male | Female

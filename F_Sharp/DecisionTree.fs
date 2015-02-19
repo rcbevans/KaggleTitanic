@@ -7,7 +7,9 @@ module internal Tuple =
     let toArray = FSharpValue.GetTupleFields
 
 module internal Array =
-    let removeAt i (xs:'a[]) = [|yield! xs.[..i-1];yield! xs.[i+1..]|]
+    let removeAt i (xs:'a[]) = 
+        [|yield! xs.[0..i-1];
+          if i < xs.Length then yield! xs.[i+1..]|]
 
 let splitDataSet(dataSet:obj[][], axis, value) = [|
     for featVec in dataSet do
